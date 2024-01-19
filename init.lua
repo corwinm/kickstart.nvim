@@ -76,6 +76,31 @@ require('lazy').setup({
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
 
+  -- code formatting
+  -- TODO: Still evaluating and need to add additional file types for prettier
+  {
+    'mhartington/formatter.nvim',
+    config = function()
+      local formatter_prettier = { require('formatter.defaults.prettier') }
+      require("formatter").setup({
+        filetype = {
+          javascript      = formatter_prettier,
+          javascriptreact = formatter_prettier,
+          typescript      = formatter_prettier,
+          typescriptreact = formatter_prettier,
+        }
+      })
+      -- automatically format buffer before writing to disk:
+      vim.api.nvim_create_augroup('BufWritePreFormatter', {})
+      vim.api.nvim_create_autocmd('BufWritePre', {
+        command = 'FormatWrite',
+        group = 'BufWritePreFormatter',
+        pattern = { '*.js', '*.jsx', '*.ts', '*.tsx' },
+      })
+    end,
+    ft = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
+  },
+
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.
   {
@@ -83,12 +108,15 @@ require('lazy').setup({
     'neovim/nvim-lspconfig',
     dependencies = {
       -- Automatically install LSPs to stdpath for neovim
-      { 'williamboman/mason.nvim', config = true },
+      {
+        'williamboman/mason.nvim',
+        config = true,
+      },
       'williamboman/mason-lspconfig.nvim',
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim',       opts = {} },
+      { 'j-hui/fidget.nvim', opts = {} },
 
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
