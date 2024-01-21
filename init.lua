@@ -407,7 +407,8 @@ local function find_git_root()
   end
 
   -- Find the Git root directory from the current file's path
-  local git_root = vim.fn.systemlist('git -C ' .. vim.fn.escape(current_dir or '', ' ') .. ' rev-parse --show-toplevel')[1]
+  local git_root = vim.fn.systemlist('git -C ' .. vim.fn.escape(current_dir or '', ' ') .. ' rev-parse --show-toplevel')
+  [1]
   if vim.v.shell_error ~= 0 then
     print 'Not a git repository. Searching on current working directory'
     return cwd
@@ -461,7 +462,8 @@ vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = 
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash' },
+    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim',
+      'bash' },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
@@ -703,7 +705,7 @@ cmp.setup {
 -- Setup Harpoon
 local harpoon = require("harpoon")
 
-harpoon:setup()
+harpoon:setup({})
 
 vim.keymap.set("n", "<leader>pa", function() harpoon:list():append() end)
 vim.keymap.set("n", "<C-e>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
