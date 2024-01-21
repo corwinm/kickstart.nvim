@@ -408,7 +408,7 @@ local function find_git_root()
 
   -- Find the Git root directory from the current file's path
   local git_root = vim.fn.systemlist('git -C ' .. vim.fn.escape(current_dir or '', ' ') .. ' rev-parse --show-toplevel')
-  [1]
+      [1]
   if vim.v.shell_error ~= 0 then
     print 'Not a git repository. Searching on current working directory'
     return cwd
@@ -707,7 +707,7 @@ local harpoon = require("harpoon")
 
 harpoon:setup({})
 
-vim.keymap.set("n", "<leader>pa", function() harpoon:list():append() end)
+vim.keymap.set("n", "<leader>pa", function() harpoon:list():append() end, { desc = 'Har[p]oon [a]ppend' })
 vim.keymap.set("n", "<C-e>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
 
 vim.keymap.set("n", "<C-h>", function() harpoon:list():select(1) end)
