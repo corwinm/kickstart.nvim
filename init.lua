@@ -76,29 +76,9 @@ require('lazy').setup({
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
 
-  -- code formatting
-  -- TODO: Still evaluating and need to add additional file types for prettier
   {
-    'mhartington/formatter.nvim',
-    config = function()
-      local formatter_prettier = { require('formatter.defaults.prettier') }
-      require("formatter").setup({
-        filetype = {
-          javascript      = formatter_prettier,
-          javascriptreact = formatter_prettier,
-          typescript      = formatter_prettier,
-          typescriptreact = formatter_prettier,
-        }
-      })
-      -- automatically format buffer before writing to disk:
-      vim.api.nvim_create_augroup('BufWritePreFormatter', {})
-      vim.api.nvim_create_autocmd('BufWritePre', {
-        command = 'FormatWrite',
-        group = 'BufWritePreFormatter',
-        pattern = { '*.js', '*.jsx', '*.ts', '*.tsx' },
-      })
-    end,
-    ft = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
+    'stevearc/conform.nvim',
+    opts = {},
   },
 
   -- NOTE: This is where your plugins related to LSP can be installed.
@@ -288,6 +268,8 @@ require('lazy').setup({
     branch = "harpoon2",
     dependencies = { "nvim-lua/plenary.nvim" }
   },
+
+  "Pocco81/auto-save.nvim",
 
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
@@ -722,8 +704,37 @@ vim.keymap.set("n", "<C-4>", function() harpoon:list():select(4) end)
 vim.keymap.set("n", "<C-S-P>", function() harpoon:list():prev() end)
 vim.keymap.set("n", "<C-S-N>", function() harpoon:list():next() end)
 
+require("conform").setup({
+  formatters_by_ft = {
+    lua = { "stylua" },
+    -- Conform will run multiple formatters sequentially
+    python = { "isort", "black" },
+    -- Use a sub-list to run only the first available formatter
+    typescript = { { 'prettierd', "prettier" } },
+    typescriptreact = { { 'prettierd', "prettier" } },
+    javascript = { { 'prettierd', "prettier" } },
+    javascriptreact = { { 'prettierd', "prettier" } },
+    json = { { 'prettierd', "prettier" } },
+    html = { { 'prettierd', "prettier" } },
+    css = { { 'prettierd', "prettier" } },
+  },
+  format_on_save = {
+    -- These options will be passed to conform.format()
+    timeout_ms = 500,
+    lsp_fallback = true,
+  },
+})
+
+-- Setup auto-save
+require("auto-save").setup()
+
+vim.api.nvim_set_keymap("n", "<leader>n", ":ASToggle<CR>", {})
+
 -- Remaps
-vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
+vim.keymap.set("n", "<leader>f", function()
+  require("conform").format({ async = true, lsp_fallback = true })
+end)
+-- vim.lsp.buf.format)
 
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
