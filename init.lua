@@ -564,6 +564,7 @@ require('which-key').register {
   ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
   ['<leader>g'] = { name = '[G]it', _ = 'which_key_ignore' },
   ['<leader>h'] = { name = 'Git [H]unk', _ = 'which_key_ignore' },
+  ['<leader>p'] = { name = 'Har[p]oon', _ = 'which_key_ignore' },
   ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
   ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
   ['<leader>t'] = { name = '[T]oggle', _ = 'which_key_ignore' },
@@ -734,8 +735,7 @@ vim.api.nvim_set_keymap("n", "<leader>n", ":ASToggle<CR>", {})
 -- Remaps
 vim.keymap.set("n", "<leader>f", function()
   require("conform").format({ async = true, lsp_fallback = true })
-end)
--- vim.lsp.buf.format)
+end, { desc = "[f]ormat (conform)" })
 
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
