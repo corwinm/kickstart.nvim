@@ -121,7 +121,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim',  opts = {} },
+  { 'folke/which-key.nvim', opts = {} },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -264,12 +264,12 @@ require('lazy').setup({
   },
 
   {
-    "ThePrimeagen/harpoon",
-    branch = "harpoon2",
-    dependencies = { "nvim-lua/plenary.nvim" }
+    'ThePrimeagen/harpoon',
+    branch = 'harpoon2',
+    dependencies = { 'nvim-lua/plenary.nvim' },
   },
 
-  "Pocco81/auto-save.nvim",
+  'Pocco81/auto-save.nvim',
 
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
@@ -283,7 +283,7 @@ require('lazy').setup({
   --    Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --
   --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
-  { import = 'custom.plugins' }
+  { import = 'custom.plugins' },
 }, {})
 
 -- [[ Setting options ]]
@@ -389,8 +389,7 @@ local function find_git_root()
   end
 
   -- Find the Git root directory from the current file's path
-  local git_root = vim.fn.systemlist('git -C ' .. vim.fn.escape(current_dir or '', ' ') .. ' rev-parse --show-toplevel')
-      [1]
+  local git_root = vim.fn.systemlist('git -C ' .. vim.fn.escape(current_dir or '', ' ') .. ' rev-parse --show-toplevel')[1]
   if vim.v.shell_error ~= 0 then
     print 'Not a git repository. Searching on current working directory'
     return cwd
@@ -444,8 +443,7 @@ vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = 
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'c', 'cpp', 'css', 'html', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim',
-      'bash' },
+    ensure_installed = { 'c', 'cpp', 'css', 'html', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash' },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
@@ -689,91 +687,104 @@ cmp.setup {
 }
 
 -- Setup Harpoon
-local harpoon = require("harpoon")
+local harpoon = require 'harpoon'
 
-harpoon:setup({})
+harpoon:setup {}
 -- auto-save and harpoon list don't get along
-harpoon:extend({
+harpoon:extend {
   UI_CREATE = function()
     require('auto-save').off()
   end,
   SELECT = function()
     require('auto-save').on()
   end,
-})
+}
 
-vim.keymap.set("n", "<leader>oa", function() harpoon:list():append() end, { desc = 'Harp[o]on [a]ppend' })
-vim.keymap.set("n", "<leader>ol", function()
-    harpoon.ui:toggle_quick_menu(harpoon:list())
-  end,
-  { desc = 'Harp[o]on [l]ist' })
+vim.keymap.set('n', '<leader>oa', function()
+  harpoon:list():append()
+end, { desc = 'Harp[o]on [a]ppend' })
+vim.keymap.set('n', '<leader>ol', function()
+  harpoon.ui:toggle_quick_menu(harpoon:list())
+end, { desc = 'Harp[o]on [l]ist' })
 
-vim.keymap.set("n", "<C-1>", function() harpoon:list():select(1) end)
-vim.keymap.set("n", "<C-2>", function() harpoon:list():select(2) end)
-vim.keymap.set("n", "<C-3>", function() harpoon:list():select(3) end)
-vim.keymap.set("n", "<C-4>", function() harpoon:list():select(4) end)
+vim.keymap.set('n', '<C-1>', function()
+  harpoon:list():select(1)
+end)
+vim.keymap.set('n', '<C-2>', function()
+  harpoon:list():select(2)
+end)
+vim.keymap.set('n', '<C-3>', function()
+  harpoon:list():select(3)
+end)
+vim.keymap.set('n', '<C-4>', function()
+  harpoon:list():select(4)
+end)
 
 -- Toggle previous & next buffers stored within Harpoon list
-vim.keymap.set("n", "<leader>op", function() harpoon:list():prev() end, { desc = 'Harp[o]on [p]revious' })
-vim.keymap.set("n", "<leader>on", function() harpoon:list():next() end, { desc = 'Harp[o]on [n]ext' })
+vim.keymap.set('n', '<leader>op', function()
+  harpoon:list():prev()
+end, { desc = 'Harp[o]on [p]revious' })
+vim.keymap.set('n', '<leader>on', function()
+  harpoon:list():next()
+end, { desc = 'Harp[o]on [n]ext' })
 
-require("conform").setup({
+require('conform').setup {
   formatters_by_ft = {
-    lua = { "stylua" },
+    lua = { 'stylua' },
     -- Conform will run multiple formatters sequentially
-    python = { "isort", "black" },
+    python = { 'isort', 'black' },
     -- Use a sub-list to run only the first available formatter
-    typescript = { { 'prettierd', "prettier" } },
-    typescriptreact = { { 'prettierd', "prettier" } },
-    javascript = { { 'prettierd', "prettier" } },
-    javascriptreact = { { 'prettierd', "prettier" } },
-    json = { { 'prettierd', "prettier" } },
-    html = { { 'prettierd', "prettier" } },
-    css = { { 'prettierd', "prettier" } },
+    typescript = { { 'prettierd', 'prettier' } },
+    typescriptreact = { { 'prettierd', 'prettier' } },
+    javascript = { { 'prettierd', 'prettier' } },
+    javascriptreact = { { 'prettierd', 'prettier' } },
+    json = { { 'prettierd', 'prettier' } },
+    html = { { 'prettierd', 'prettier' } },
+    css = { { 'prettierd', 'prettier' } },
   },
   format_on_save = {
     -- These options will be passed to conform.format()
     timeout_ms = 500,
     lsp_fallback = true,
   },
-})
+}
 
 -- Setup auto-save
-require("auto-save").setup()
+require('auto-save').setup()
 
-vim.api.nvim_set_keymap("n", "<leader>n", ":ASToggle<CR>", {})
+vim.api.nvim_set_keymap('n', '<leader>n', ':ASToggle<CR>', {})
 
 -- Remaps
-vim.keymap.set("n", "<leader>f", function()
-  require("conform").format({ async = true, lsp_fallback = true })
-end, { desc = "[f]ormat (conform)" })
+vim.keymap.set('n', '<leader>f', function()
+  require('conform').format { async = true, lsp_fallback = true }
+end, { desc = '[f]ormat (conform)' })
 
 -- Not Sure what I like best here
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
-vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
-vim.keymap.set("n", "<A-j>", ":m .+1<CR>==")     -- move line up(n)
-vim.keymap.set("n", "<A-k>", ":m .-2<CR>==")     -- move line down(n)
-vim.keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv") -- move line up(v)
-vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv") -- move line down(v)
+vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
+vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
+vim.keymap.set('n', '<A-j>', ':m .+1<CR>==') -- move line up(n)
+vim.keymap.set('n', '<A-k>', ':m .-2<CR>==') -- move line down(n)
+vim.keymap.set('v', '<A-j>', ":m '>+1<CR>gv=gv") -- move line up(v)
+vim.keymap.set('v', '<A-k>', ":m '<-2<CR>gv=gv") -- move line down(v)
 
-vim.keymap.set("n", "<C-u>", "<C-u>zz")
-vim.keymap.set("n", "<C-d>", "<C-d>zz")
-vim.keymap.set("n", "n", "nzzzv")
-vim.keymap.set("n", "N", "Nzzzv")
-vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz")
-vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz")
-vim.keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz")
-vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz")
-vim.keymap.set("n", "*", "*zz")
+vim.keymap.set('n', '<C-u>', '<C-u>zz')
+vim.keymap.set('n', '<C-d>', '<C-d>zz')
+vim.keymap.set('n', 'n', 'nzzzv')
+vim.keymap.set('n', 'N', 'Nzzzv')
+vim.keymap.set('n', '<C-k>', '<cmd>cnext<CR>zz')
+vim.keymap.set('n', '<C-j>', '<cmd>cprev<CR>zz')
+vim.keymap.set('n', '<leader>k', '<cmd>lnext<CR>zz')
+vim.keymap.set('n', '<leader>j', '<cmd>lprev<CR>zz')
+vim.keymap.set('n', '*', '*zz')
 
 -- greatest remap ever
-vim.keymap.set("x", "<leader>p", [["_dP]])
+vim.keymap.set('x', '<leader>p', [["_dP]])
 
 -- next greatest remap ever : asbjornHaland
-vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
-vim.keymap.set("n", "<leader>Y", [["+Y]])
+vim.keymap.set({ 'n', 'v' }, '<leader>y', [["+y]])
+vim.keymap.set('n', '<leader>Y', [["+Y]])
 
-vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
+vim.keymap.set({ 'n', 'v' }, '<leader>d', [["_d]])
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
