@@ -121,7 +121,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim', opts = {} },
+  { 'folke/which-key.nvim',  opts = {} },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -299,6 +299,11 @@ vim.wo.number = true
 -- Make line numbers relative
 vim.wo.relativenumber = true
 
+-- Make tabs default to 4
+vim.o.tabstop = 4
+vim.o.softtabstop = 4
+vim.o.shiftwidth = 4
+
 -- Enable mouse mode
 vim.o.mouse = 'a'
 
@@ -389,7 +394,8 @@ local function find_git_root()
   end
 
   -- Find the Git root directory from the current file's path
-  local git_root = vim.fn.systemlist('git -C ' .. vim.fn.escape(current_dir or '', ' ') .. ' rev-parse --show-toplevel')[1]
+  local git_root = vim.fn.systemlist('git -C ' .. vim.fn.escape(current_dir or '', ' ') .. ' rev-parse --show-toplevel')
+      [1]
   if vim.v.shell_error ~= 0 then
     print 'Not a git repository. Searching on current working directory'
     return cwd
@@ -762,8 +768,8 @@ end, { desc = '[f]ormat (conform)' })
 -- Not Sure what I like best here
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
-vim.keymap.set('n', '<A-j>', ':m .+1<CR>==') -- move line up(n)
-vim.keymap.set('n', '<A-k>', ':m .-2<CR>==') -- move line down(n)
+vim.keymap.set('n', '<A-j>', ':m .+1<CR>==')     -- move line up(n)
+vim.keymap.set('n', '<A-k>', ':m .-2<CR>==')     -- move line down(n)
 vim.keymap.set('v', '<A-j>', ":m '>+1<CR>gv=gv") -- move line up(v)
 vim.keymap.set('v', '<A-k>', ":m '<-2<CR>gv=gv") -- move line down(v)
 
