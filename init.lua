@@ -121,7 +121,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim',  opts = {} },
+  { 'folke/which-key.nvim',   opts = {} },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -231,7 +231,11 @@ require('lazy').setup({
   },
 
   -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
+  {
+    'numToStr/Comment.nvim',
+    opts = {}
+  },
+  'JoosepAlviste/nvim-ts-context-commentstring',
 
   -- Fuzzy Finder (files, lsp, etc)
   {
@@ -334,6 +338,8 @@ vim.o.completeopt = 'menuone,noselect'
 
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
+
+vim.g.skip_ts_context_commentstring_module = true
 
 -- [[ Basic Keymaps ]]
 
@@ -748,6 +754,15 @@ end)
 vim.keymap.set('n', '<C-4>', function()
   harpoon:list():select(4)
 end)
+
+require('ts_context_commentstring').setup {
+  enable_autocmd = false,
+}
+
+---@diagnostic disable-next-line: missing-fields
+require('Comment').setup {
+  pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
+}
 
 -- Toggle previous & next buffers stored within Harpoon list
 vim.keymap.set('n', '<leader>op', function()
