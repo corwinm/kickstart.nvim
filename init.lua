@@ -102,7 +102,7 @@ vim.g.have_nerd_font = true
 vim.opt.number = true
 -- You can also add relative line numbers, for help with jumping.
 --  Experiment for yourself to see if you like it!
--- vim.opt.relativenumber = true
+vim.opt.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
@@ -198,6 +198,34 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
+-- Not Sure what I like best here
+vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
+vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
+vim.keymap.set('n', '<A-j>', ':m .+1<CR>==')     -- move line up(n)
+vim.keymap.set('n', '<A-k>', ':m .-2<CR>==')     -- move line down(n)
+vim.keymap.set('v', '<A-j>', ":m '>+1<CR>gv=gv") -- move line up(v)
+vim.keymap.set('v', '<A-k>', ":m '<-2<CR>gv=gv") -- move line down(v)
+
+-- Center view when scrolling
+vim.keymap.set('n', '<C-u>', '<C-u>zz')
+vim.keymap.set('n', '<C-d>', '<C-d>zz')
+vim.keymap.set('n', 'n', 'nzzzv')
+vim.keymap.set('n', 'N', 'Nzzzv')
+-- vim.keymap.set('n', '<C-k>', '<cmd>cnext<CR>zz')
+-- vim.keymap.set('n', '<C-j>', '<cmd>cprev<CR>zz')
+-- vim.keymap.set('n', '<leader>k', '<cmd>lnext<CR>zz')
+-- vim.keymap.set('n', '<leader>j', '<cmd>lprev<CR>zz')
+vim.keymap.set('n', '*', '*zz')
+
+-- greatest remap ever
+vim.keymap.set('x', '<leader>p', [["_dP]], { desc = "delete _ and [p]aste" })
+
+-- next greatest remap ever : asbjornHaland
+vim.keymap.set({ 'n', 'v' }, '<leader>y', [["+y]], { desc = "[y]ank system" })
+vim.keymap.set('n', '<leader>Y', [["+Y]], { desc = "[Y]ank line system" })
+
+vim.keymap.set({ 'n', 'v' }, '<leader>d', [["_d]], { desc = "[d]elete _" })
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -235,6 +263,7 @@ vim.api.nvim_create_autocmd('BufWritePre', {
   end,
 })
 
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -259,6 +288,18 @@ require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
 
+  {
+    'JoosepAlviste/nvim-ts-context-commentstring',
+    opts = {
+      -- enable_autocmd = true,
+    },
+    config = function()
+      ---@diagnostic disable-next-line: missing-fields
+      require('Comment').setup {
+        pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
+      }
+    end,
+  },
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
   -- keys can be used to configure plugin behavior/loading/etc.
@@ -269,8 +310,23 @@ require('lazy').setup({
   --    require('Comment').setup({})
 
   -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
-  'JoosepAlviste/nvim-ts-context-commentstring',
+  {
+    'numToStr/Comment.nvim',
+    opts = {
+    }
+  },
+  {
+    'JoosepAlviste/nvim-ts-context-commentstring',
+    opts = {
+      -- enable_autocmd = true,
+    },
+    config = function()
+      ---@diagnostic disable-next-line: missing-fields
+      require('Comment').setup {
+        pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
+      }
+    end,
+  },
 
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following lua:
@@ -305,7 +361,7 @@ require('lazy').setup({
   -- after the plugin has been loaded:
   --  config = function() ... end
 
-  { -- Useful plugin to show you pending keybinds.
+  {                     -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     config = function() -- This is the function that runs, AFTER loading
@@ -314,10 +370,11 @@ require('lazy').setup({
       -- Document existing key chains
       require('which-key').register {
         ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
-        ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
         ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
         ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
         ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
+        ['<leader>o'] = { name = 'Harp[o]on', _ = 'which_key_ignore' },
+        ['<leader>t'] = { name = '[T]rouble', _ = 'which_key_ignore' },
       }
     end,
   },
@@ -326,9 +383,57 @@ require('lazy').setup({
     'ThePrimeagen/harpoon',
     branch = 'harpoon2',
     dependencies = { 'nvim-lua/plenary.nvim' },
+    opts = {},
+    config = function()
+      local harpoon = require 'harpoon'
+
+      -- auto-save and harpoon list don't get along
+      harpoon:extend {
+        UI_CREATE = function()
+          require('auto-save').off()
+        end,
+        SELECT = function()
+          require('auto-save').on()
+        end,
+      }
+
+      vim.keymap.set('n', '<leader>oa', function()
+        harpoon:list():append()
+      end, { desc = 'Harp[o]on [a]ppend' })
+      vim.keymap.set('n', '<leader>ol', function()
+        harpoon.ui:toggle_quick_menu(harpoon:list())
+      end, { desc = 'Harp[o]on [l]ist' })
+
+      vim.keymap.set('n', '<C-1>', function()
+        harpoon:list():select(1)
+      end)
+      vim.keymap.set('n', '<C-2>', function()
+        harpoon:list():select(2)
+      end)
+      vim.keymap.set('n', '<C-3>', function()
+        harpoon:list():select(3)
+      end)
+      vim.keymap.set('n', '<C-4>', function()
+        harpoon:list():select(4)
+      end)
+
+      -- Toggle previous & next buffers stored within Harpoon list
+      vim.keymap.set('n', '<leader>op', function()
+        harpoon:list():prev()
+      end, { desc = 'Harp[o]on [p]revious' })
+      vim.keymap.set('n', '<leader>on', function()
+        harpoon:list():next()
+      end, { desc = 'Harp[o]on [n]ext' })
+    end,
   },
 
-  'Pocco81/auto-save.nvim',
+  {
+    'Pocco81/auto-save.nvim',
+    opts = {},
+    config = function()
+      vim.api.nvim_set_keymap('n', '<leader>n', ':ASToggle<CR>', {})
+    end,
+  },
 
   -- NOTE: Plugins can specify dependencies.
   --
@@ -359,7 +464,7 @@ require('lazy').setup({
       { 'nvim-telescope/telescope-ui-select.nvim' },
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
-      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
+      { 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -439,25 +544,6 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sn', function()
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
       end, { desc = '[S]earch [N]eovim files' })
-      -- TODO: Find placement
-      -- Create a command `:Format` local to the LSP buffer
-      --   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
-      --     vim.lsp.buf.format()
-      --   end, { desc = 'Format current buffer with LSP' })
-      -- end
-      --
-      -- -- document existing key chains
-      -- require('which-key').register {
-      --   ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
-      --   ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
-      --   ['<leader>g'] = { name = '[G]it', _ = 'which_key_ignore' },
-      --   ['<leader>h'] = { name = 'Git [H]unk', _ = 'which_key_ignore' },
-      --   ['<leader>o'] = { name = 'Harp[o]on', _ = 'which_key_ignore' },
-      --   ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
-      --   ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
-      --   ['<leader>t'] = { name = '[T]oggle', _ = 'which_key_ignore' },
-      --   ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
-      -- }
     end,
   },
 
@@ -535,7 +621,7 @@ require('lazy').setup({
 
           -- Fuzzy find all the symbols in your current document.
           --  Symbols are things like variables, functions, types, etc.
-          map('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
+          map('<leader>sds', require('telescope.builtin').lsp_document_symbols, '[S]earch [D]ocument [S]ymbols')
 
           -- Fuzzy find all the symbols in your current workspace
           --  Similar to document symbols, except searches over your whole project.
@@ -675,21 +761,33 @@ require('lazy').setup({
   { -- Autoformat
     'stevearc/conform.nvim',
     opts = {
-      notify_on_error = false,
+      formatters_by_ft = {
+        lua = { 'stylua' },
+        -- Conform will run multiple formatters sequentially
+        python = { 'isort', 'black' },
+        -- Use a sub-list to run only the first available formatter
+        typescript = { { 'prettierd', 'prettier' } },
+        typescriptreact = { { 'prettierd', 'prettier' } },
+        javascript = { { 'prettierd', 'prettier' } },
+        javascriptreact = { { 'prettierd', 'prettier' } },
+        json = { { 'prettierd', 'prettier' } },
+        html = { { 'prettierd', 'prettier' } },
+        css = { { 'prettierd', 'prettier' } },
+        go = { 'goimports', 'gofumpt' },
+      },
       format_on_save = {
+        -- These options will be passed to conform.format()
         timeout_ms = 500,
         lsp_fallback = true,
       },
-      formatters_by_ft = {
-        lua = { 'stylua' },
-        -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
-        -- You can use a sub-list to tell conform to run *until* a formatter
-        -- is found.
-        -- javascript = { { "prettierd", "prettier" } },
-      },
+      notify_on_error = false,
     },
+    config = function()
+      -- Remaps
+      vim.keymap.set('n', '<leader>f', function()
+        require('conform').format { async = true, lsp_fallback = true }
+      end, { desc = '[f]ormat (conform)' })
+    end,
   },
 
   { -- Autocompletion
@@ -877,15 +975,15 @@ require('lazy').setup({
   --  Here are some example plugins that I've included in the kickstart repository.
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
-  -- require 'kickstart.plugins.debug',
-  -- require 'kickstart.plugins.indent_line',
+  require 'kickstart.plugins.debug',
+  require 'kickstart.plugins.indent_line',
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
 }, {
   ui = {
     -- If you have a Nerd Font, set icons to an empty table which will use the
@@ -907,116 +1005,6 @@ require('lazy').setup({
     },
   },
 })
-
--- Setup Harpoon
-local harpoon = require 'harpoon'
-
-harpoon:setup {}
--- auto-save and harpoon list don't get along
-harpoon:extend {
-  UI_CREATE = function()
-    require('auto-save').off()
-  end,
-  SELECT = function()
-    require('auto-save').on()
-  end,
-}
-
-vim.keymap.set('n', '<leader>oa', function()
-  harpoon:list():append()
-end, { desc = 'Harp[o]on [a]ppend' })
-vim.keymap.set('n', '<leader>ol', function()
-  harpoon.ui:toggle_quick_menu(harpoon:list())
-end, { desc = 'Harp[o]on [l]ist' })
-
-vim.keymap.set('n', '<C-1>', function()
-  harpoon:list():select(1)
-end)
-vim.keymap.set('n', '<C-2>', function()
-  harpoon:list():select(2)
-end)
-vim.keymap.set('n', '<C-3>', function()
-  harpoon:list():select(3)
-end)
-vim.keymap.set('n', '<C-4>', function()
-  harpoon:list():select(4)
-end)
-
-require('ts_context_commentstring').setup {
-  enable_autocmd = false,
-}
-
----@diagnostic disable-next-line: missing-fields
-require('Comment').setup {
-  pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
-}
-
--- Toggle previous & next buffers stored within Harpoon list
-vim.keymap.set('n', '<leader>op', function()
-  harpoon:list():prev()
-end, { desc = 'Harp[o]on [p]revious' })
-vim.keymap.set('n', '<leader>on', function()
-  harpoon:list():next()
-end, { desc = 'Harp[o]on [n]ext' })
-
-require('conform').setup {
-  formatters_by_ft = {
-    lua = { 'stylua' },
-    -- Conform will run multiple formatters sequentially
-    python = { 'isort', 'black' },
-    -- Use a sub-list to run only the first available formatter
-    typescript = { { 'prettierd', 'prettier' } },
-    typescriptreact = { { 'prettierd', 'prettier' } },
-    javascript = { { 'prettierd', 'prettier' } },
-    javascriptreact = { { 'prettierd', 'prettier' } },
-    json = { { 'prettierd', 'prettier' } },
-    html = { { 'prettierd', 'prettier' } },
-    css = { { 'prettierd', 'prettier' } },
-    go = { 'goimports', 'gofumpt' },
-  },
-  format_on_save = {
-    -- These options will be passed to conform.format()
-    timeout_ms = 500,
-    lsp_fallback = true,
-  },
-}
-
--- Setup auto-save
-require('auto-save').setup()
-
-vim.api.nvim_set_keymap('n', '<leader>n', ':ASToggle<CR>', {})
-
--- Remaps
-vim.keymap.set('n', '<leader>f', function()
-  require('conform').format { async = true, lsp_fallback = true }
-end, { desc = '[f]ormat (conform)' })
-
--- Not Sure what I like best here
-vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
-vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
-vim.keymap.set('n', '<A-j>', ':m .+1<CR>==') -- move line up(n)
-vim.keymap.set('n', '<A-k>', ':m .-2<CR>==') -- move line down(n)
-vim.keymap.set('v', '<A-j>', ":m '>+1<CR>gv=gv") -- move line up(v)
-vim.keymap.set('v', '<A-k>', ":m '<-2<CR>gv=gv") -- move line down(v)
-
-vim.keymap.set('n', '<C-u>', '<C-u>zz')
-vim.keymap.set('n', '<C-d>', '<C-d>zz')
-vim.keymap.set('n', 'n', 'nzzzv')
-vim.keymap.set('n', 'N', 'Nzzzv')
-vim.keymap.set('n', '<C-k>', '<cmd>cnext<CR>zz')
-vim.keymap.set('n', '<C-j>', '<cmd>cprev<CR>zz')
-vim.keymap.set('n', '<leader>k', '<cmd>lnext<CR>zz')
-vim.keymap.set('n', '<leader>j', '<cmd>lprev<CR>zz')
-vim.keymap.set('n', '*', '*zz')
-
--- greatest remap ever
-vim.keymap.set('x', '<leader>p', [["_dP]])
-
--- next greatest remap ever : asbjornHaland
-vim.keymap.set({ 'n', 'v' }, '<leader>y', [["+y]])
-vim.keymap.set('n', '<leader>Y', [["+Y]])
-
-vim.keymap.set({ 'n', 'v' }, '<leader>d', [["_d]])
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
