@@ -204,8 +204,8 @@ vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = tr
 -- Not Sure what I like best here
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
-vim.keymap.set('n', '<A-j>', ':m .+1<CR>==')     -- move line up(n)
-vim.keymap.set('n', '<A-k>', ':m .-2<CR>==')     -- move line down(n)
+vim.keymap.set('n', '<A-j>', ':m .+1<CR>==') -- move line up(n)
+vim.keymap.set('n', '<A-k>', ':m .-2<CR>==') -- move line down(n)
 vim.keymap.set('v', '<A-j>', ":m '>+1<CR>gv=gv") -- move line up(v)
 vim.keymap.set('v', '<A-k>', ":m '<-2<CR>gv=gv") -- move line down(v)
 
@@ -221,13 +221,13 @@ vim.keymap.set('n', 'N', 'Nzzzv')
 vim.keymap.set('n', '*', '*zz')
 
 -- greatest remap ever
-vim.keymap.set('x', '<leader>p', [["_dP]], { desc = "delete _ and [p]aste" })
+vim.keymap.set('x', '<leader>p', [["_dP]], { desc = 'delete _ and [p]aste' })
 
 -- next greatest remap ever : asbjornHaland
-vim.keymap.set({ 'n', 'v' }, '<leader>y', [["+y]], { desc = "[y]ank system" })
-vim.keymap.set('n', '<leader>Y', [["+Y]], { desc = "[Y]ank line system" })
+vim.keymap.set({ 'n', 'v' }, '<leader>y', [["+y]], { desc = '[y]ank system' })
+vim.keymap.set('n', '<leader>Y', [["+Y]], { desc = '[Y]ank line system' })
 
-vim.keymap.set({ 'n', 'v' }, '<leader>d', [["_d]], { desc = "[d]elete _" })
+vim.keymap.set({ 'n', 'v' }, '<leader>d', [["_d]], { desc = '[d]elete _' })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -265,7 +265,6 @@ vim.api.nvim_create_autocmd('BufWritePre', {
     vim.lsp.buf.format { async = false }
   end,
 })
-
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
@@ -315,8 +314,7 @@ require('lazy').setup({
   -- "gc" to comment visual regions/lines
   {
     'numToStr/Comment.nvim',
-    opts = {
-    }
+    opts = {},
   },
   {
     'JoosepAlviste/nvim-ts-context-commentstring',
@@ -364,7 +362,7 @@ require('lazy').setup({
   -- after the plugin has been loaded:
   --  config = function() ... end
 
-  {                     -- Useful plugin to show you pending keybinds.
+  { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     config = function() -- This is the function that runs, AFTER loading
@@ -473,7 +471,7 @@ require('lazy').setup({
       { 'nvim-telescope/telescope-ui-select.nvim' },
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
-      { 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
+      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -566,11 +564,11 @@ require('lazy').setup({
 
       -- Useful status updates for LSP.
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim',       opts = {} },
+      { 'j-hui/fidget.nvim', opts = {} },
 
       -- `neodev` configures Lua LSP for your Neovim config, runtime and plugins
       -- used for completion, annotations and signatures of Neovim apis
-      { 'folke/neodev.nvim',       opts = {} },
+      { 'folke/neodev.nvim', opts = {} },
     },
     config = function()
       -- Brief aside: **What is LSP?**
@@ -820,12 +818,6 @@ require('lazy').setup({
         go = { 'goimports', 'gofumpt' },
       },
     },
-    config = function()
-      -- Remaps
-      vim.keymap.set('n', '<leader>f', function()
-        require('conform').format { async = true, lsp_fallback = true }
-      end, { desc = '[f]ormat (conform)' })
-    end,
   },
 
   { -- Autocompletion
