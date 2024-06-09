@@ -290,18 +290,6 @@ require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
 
-  {
-    'JoosepAlviste/nvim-ts-context-commentstring',
-    opts = {
-      -- enable_autocmd = true,
-    },
-    config = function()
-      ---@diagnostic disable-next-line: missing-fields
-      require('Comment').setup {
-        pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
-      }
-    end,
-  },
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
   -- keys can be used to configure plugin behavior/loading/etc.
