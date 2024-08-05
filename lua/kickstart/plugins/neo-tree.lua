@@ -19,6 +19,10 @@ return {
         mappings = {
           ['\\'] = 'close_window',
         },
+        position = 'right',
+      },
+      filtered_items = {
+        visible = true, -- If I'm using the filetree just show me everything
       },
     },
   },
