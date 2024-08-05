@@ -804,6 +804,8 @@ require('lazy').setup({
         html = { { 'prettierd', 'prettier' } },
         css = { { 'prettierd', 'prettier' } },
         go = { 'goimports', 'gofumpt' },
+        markdown = { { 'prettierd', 'prettier' } },
+        telekasten = { { 'prettierd', 'prettier' } },
       },
     },
   },
