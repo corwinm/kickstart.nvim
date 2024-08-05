@@ -214,10 +214,6 @@ vim.keymap.set('n', '<C-u>', '<C-u>zz')
 vim.keymap.set('n', '<C-d>', '<C-d>zz')
 vim.keymap.set('n', 'n', 'nzzzv')
 vim.keymap.set('n', 'N', 'Nzzzv')
--- vim.keymap.set('n', '<C-k>', '<cmd>cnext<CR>zz')
--- vim.keymap.set('n', '<C-j>', '<cmd>cprev<CR>zz')
--- vim.keymap.set('n', '<leader>k', '<cmd>lnext<CR>zz')
--- vim.keymap.set('n', '<leader>j', '<cmd>lprev<CR>zz')
 vim.keymap.set('n', '*', '*zz')
 
 -- greatest remap ever
@@ -351,11 +347,10 @@ require('lazy').setup({
         { '<leader>d', group = '[D]ocument' },
         { '<leader>r', group = '[R]ename' },
         { '<leader>s', group = '[S]earch' },
-        { '<leader>sd', group = '[S]earch [D]ocument' },
         { '<leader>w', group = '[W]orkspace' },
-        { '<leader>t', group = '[T]oggle/[T]rouble' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
         { '<leader>o', group = 'Harp[o]on' },
+        { '<leader>,', group = 'Telekasten Notes' },
       }
     end,
   },
@@ -412,7 +407,7 @@ require('lazy').setup({
     'Pocco81/auto-save.nvim',
     opts = {},
     config = function()
-      vim.api.nvim_set_keymap('n', '<leader>n', ':ASToggle<CR>', {})
+      vim.api.nvim_set_keymap('n', '<leader>n', ':ASToggle<CR>', { desc = 'Toggle AutoSave' })
     end,
   },
 
