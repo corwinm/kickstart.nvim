@@ -694,7 +694,12 @@ require('lazy').setup({
         gopls = {},
         pyright = {},
         -- rust_analyzer = {},
-        tsserver = {},
+        tsserver = {
+          root_dir = require('lspconfig').util.root_pattern 'package.json',
+        },
+        denols = {
+          root_dir = require('lspconfig').util.root_pattern 'deno.json',
+        },
         html = { filetypes = { 'html', 'twig', 'hbs' } },
         cssls = {},
         eslint = {},
