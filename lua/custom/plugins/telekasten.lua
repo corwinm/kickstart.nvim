@@ -4,6 +4,7 @@ return {
   config = function()
     require('telekasten').setup {
       home = vim.fn.expand '~/notes',
+      auto_set_filetype = false,
       template_new_note = vim.fn.expand '~/.config/nvim/lua/custom/plugins/telekasten/new-note.md',
     }
     vim.treesitter.language.register('markdown', 'telekasten')
