@@ -732,9 +732,10 @@ require('lazy').setup({
         -- rust_analyzer = {},
         ts_ls = {
           root_dir = require('lspconfig').util.root_pattern 'package.json',
+          single_file_support = false,
         },
         denols = {
-          root_dir = require('lspconfig').util.root_pattern 'deno.json',
+          root_dir = require('lspconfig').util.root_pattern('deno.json', 'deno.jsonc'),
         },
         html = { filetypes = { 'html', 'twig', 'hbs' } },
         cssls = {},
