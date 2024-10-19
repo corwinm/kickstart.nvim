@@ -739,7 +739,9 @@ require('lazy').setup({
         },
         html = { filetypes = { 'html', 'twig', 'hbs' } },
         cssls = {},
-        eslint = {},
+        eslint = {
+          root_dir = require('lspconfig').util.root_pattern 'package.json',
+        },
         tailwindcss = {},
 
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
