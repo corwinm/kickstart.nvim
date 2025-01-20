@@ -9,7 +9,6 @@ return {
     local presets = require 'markview.presets'
     require('markview').setup {
       headings = presets.headings.glow,
-      checkboxes = presets.checkboxes.nerd,
     }
   end,
   dependencies = {
