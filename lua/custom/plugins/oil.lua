@@ -12,10 +12,19 @@ return {
         view_options = {
           show_hidden = true,
         },
+        cleanup_delay_ms = 2000,
+        lsp_file_methods = {
+          enabled = true,
+          timeout = 1000,
+          autosave_changes = true,
+        },
       }
 
       -- Open parent directory in current window
       vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
+      -- Open parent directory in current window with preview
+      -- NOTE: This is not working as expected with auto-save
+      -- vim.keymap.set('n', '-', '<CMD>Oil --preview<CR>', { desc = 'Open parent directory' })
 
       -- Open parent directory in floating window
       vim.keymap.set('n', '<leader>-', require('oil').toggle_float, { desc = 'Open parent directory - float' })
