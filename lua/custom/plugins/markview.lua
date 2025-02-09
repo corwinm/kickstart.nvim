@@ -8,7 +8,9 @@ return {
   config = function()
     local presets = require 'markview.presets'
     require('markview').setup {
-      headings = presets.headings.glow,
+      markdown = {
+        headings = presets.headings.glow,
+      },
     }
   end,
   dependencies = {
