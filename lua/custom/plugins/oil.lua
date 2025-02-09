@@ -20,26 +20,25 @@ return {
         },
       }
 
-      -- Open parent directory in current window
-      vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
       -- Open parent directory in current window with preview
-      -- NOTE: This is not working as expected with auto-save
-      -- vim.keymap.set('n', '-', '<CMD>Oil --preview<CR>', { desc = 'Open parent directory' })
+      vim.keymap.set('n', '-', '<CMD>Oil --preview<CR>', { desc = 'Open parent directory' })
 
       -- Open parent directory in floating window
       vim.keymap.set('n', '<leader>-', require('oil').toggle_float, { desc = 'Open parent directory - float' })
 
-      -- Enable and disable auto-save when opening and leaving oil
-      vim.api.nvim_create_autocmd({ 'BufWinEnter' }, {
-        pattern = { 'oil://*' },
+      -- Enable and disable auto-save when opening and leaving oil or scratch buffers
+      vim.api.nvim_create_autocmd({ 'BufEnter' }, {
         callback = function()
-          require('auto-save').off()
+          if vim.bo.buftype == 'nofile' or vim.fn.expand('%:p'):match 'oil://' then
+            require('auto-save').off()
+          end
         end,
       })
       vim.api.nvim_create_autocmd({ 'BufLeave' }, {
-        pattern = { 'oil://*' },
         callback = function()
-          require('auto-save').on()
+          if vim.bo.buftype == 'nofile' or vim.fn.expand('%:p'):match 'oil://' then
+            require('auto-save').on()
+          end
         end,
       })
     end,
