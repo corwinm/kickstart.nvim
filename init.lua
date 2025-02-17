@@ -688,6 +688,9 @@ require('lazy').setup({
         cssls = {},
         eslint = {
           root_dir = require('lspconfig').util.root_pattern 'package.json',
+          settings = {
+            useFlatConfig = require('lspconfig').util.root_pattern 'eslint.config.js'() ~= nil,
+          },
         },
         tailwindcss = {},
 
