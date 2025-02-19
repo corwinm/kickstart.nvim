@@ -6,6 +6,14 @@ return {
   opts = {
     -- add any opts here
     provider = 'copilot', -- Using copilot free tier
+    windows = {
+      width = 40,
+      height = 0.5,
+      row = 0.5,
+      col = 0.5,
+      border = 'single',
+      relative = 'editor',
+    },
   },
   -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
   build = 'make',
@@ -16,7 +24,7 @@ return {
     --- The below dependencies are optional,
     'hrsh7th/nvim-cmp', -- autocompletion for avante commands and mentions
     'nvim-tree/nvim-web-devicons', -- or echasnovski/mini.icons
-    -- 'zbirenbaum/copilot.lua', -- for providers='copilot'
+    'zbirenbaum/copilot.lua', -- for providers='copilot'
     {
       -- support for image pasting
       'HakonHarnes/img-clip.nvim',
