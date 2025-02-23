@@ -25,6 +25,9 @@ return {
       },
     },
 
+    ui = {
+      enable = false,
+    },
     -- see below for full list of options 👇
     -- completion = {
     --   -- Set to false to disable completion.

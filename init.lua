@@ -161,6 +161,8 @@ vim.o.tabstop = 4
 vim.o.softtabstop = 4
 vim.o.shiftwidth = 4
 
+vim.o.conceallevel = 1
+
 vim.g.skip_ts_context_commentstring_module = true
 
 -- [[ Basic Keymaps ]]
