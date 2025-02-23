@@ -1,6 +1,7 @@
 return {
   'renerocksai/telekasten.nvim',
   dependencies = { 'nvim-telescope/telescope.nvim' },
+  disable = true,
   config = function()
     require('telekasten').setup {
       home = vim.fn.expand '~/notes',
