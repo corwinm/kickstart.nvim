@@ -237,7 +237,10 @@ return {
       -- Runs anytime you enter the buffer for a note.
       ---@param client obsidian.Client
       ---@param note obsidian.Note
-      enter_note = function(client, note) end,
+      enter_note = function(client, note)
+        -- TODO: Set the assets directory for the note based on the notes vault.
+        vim.env.NOTES_ASSETS_DIR = '~/Library/Mobile Documents/iCloud~md~obsidian/Documents/home/assets/imgs'
+      end,
 
       -- Runs anytime you leave the buffer for a note.
       ---@param client obsidian.Client
