@@ -136,3 +136,5 @@ vim.keymap.set({ 'n', 'v' }, '<leader>y', [["+y]], { desc = '[y]ank system' })
 vim.keymap.set('n', '<leader>Y', [["+Y]], { desc = '[Y]ank line system' })
 
 vim.keymap.set({ 'n', 'v' }, '<leader>d', [["_d]], { desc = '[d]elete _' })
+
+vim.keymap.set('n', '<leader>w', '<cmd>w<CR>', { desc = '[w]rite file' })
