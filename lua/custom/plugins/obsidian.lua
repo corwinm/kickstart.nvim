@@ -1,4 +1,22 @@
+local homeVault = '~/Library/Mobile Documents/iCloud~md~obsidian/Documents/home'
+local oneDriveVault = '~/OneDrive/notes'
+local workVault = '~/Developer/notes'
+local vault = nil
+
+-- Function to check folder existence
+local function folder_exists(path)
+  local expanded_path = vim.fn.expand(path)
+  local ok, _, code = os.rename(expanded_path, expanded_path)
+  return ok or code == 13 -- Code 13 means permission denied but exists
+end
+
+-- Determine and set the vault based on folder existence
+vault = folder_exists(homeVault) and homeVault or vault
+vault = folder_exists(oneDriveVault) and oneDriveVault or vault
+vault = folder_exists(workVault) and workVault or vault -- Prioritize based on folder existence
+
 return {
+
   'obsidian-nvim/obsidian.nvim',
   version = '*', -- recommended, use latest release instead of latest commit
   lazy = false,
@@ -22,8 +40,8 @@ return {
   opts = {
     workspaces = {
       {
-        name = 'home',
-        path = '~/Library/Mobile Documents/iCloud~md~obsidian/Documents/home',
+        name = 'vault',
+        path = vault,
       },
     },
 
@@ -227,29 +245,33 @@ return {
     callbacks = {
       -- Runs at the end of `require("obsidian").setup()`.
       ---@param client obsidian.Client
+      ---@diagnostic disable-next-line: unused-local
       post_setup = function(client) end,
 
       -- Runs anytime you enter the buffer for a note.
       ---@param client obsidian.Client
       ---@param note obsidian.Note
+      ---@diagnostic disable-next-line: unused-local
       enter_note = function(client, note)
-        -- TODO: Set the assets directory for the note based on the notes vault.
-        vim.env.NOTES_ASSETS_DIR = '~/Library/Mobile Documents/iCloud~md~obsidian/Documents/home/assets/imgs'
+        vim.env.NOTES_ASSETS_DIR = vault .. '/assets/imgs'
       end,
 
       -- Runs anytime you leave the buffer for a note.
       ---@param client obsidian.Client
       ---@param note obsidian.Note
+      ---@diagnostic disable-next-line: unused-local
       leave_note = function(client, note) end,
 
       -- Runs right before writing the buffer for a note.
       ---@param client obsidian.Client
       ---@param note obsidian.Note
+      ---@diagnostic disable-next-line: unused-local
       pre_write_note = function(client, note) end,
 
       -- Runs anytime the workspace is set/changed.
       ---@param client obsidian.Client
       ---@param workspace obsidian.Workspace
+      ---@diagnostic disable-next-line: unused-local
       post_set_workspace = function(client, workspace) end,
     },
 
@@ -323,17 +345,28 @@ return {
         return string.format('![%s](%s)', path.name, path)
       end,
     },
+
+    ---@class obsidian.config.FooterOpts
+    ---@field enabled? boolean
+    ---@field format? string
+    ---@field hl_group? string
+    ---@field separator? string|false Set false to disable separator; set an empty string to insert a blank line separator.
+    footer = {
+      enabled = true,
+      format = '{{backlinks}} backlinks  {{properties}} properties  {{words}} words  {{chars}} chars',
+      hl_group = 'Comment',
+      separator = string.rep('-', 80),
+    },
   },
   keys = {
-    { ',ov', '<cmd>ObsidianOpen<CR>', desc = 'Open Obsidian Vault' },
-    { ',on', '<cmd>ObsidianNew<CR>', desc = 'Create New Obsidian Note' },
-    { ',od', '<cmd>ObsidianDaily<CR>', desc = 'Open Obsidian Daily Note' },
-    { ',of', '<cmd>ObsidianQuickSwitch<CR>', desc = 'Open Obsidian Quick Switcher' },
-    { ',of', '<cmd>ObsidianFollowLink<CR>', desc = 'Follow Obsidian Link' },
-    { ',ol', '<cmd>ObsidianInsertLink<CR>', desc = 'Insert Wiki Link' },
-    { ',oa', '<cmd>ObsidianInsertAlias<CR>', desc = 'Insert Alias' },
-    { ',og', '<cmd>ObsidianGraph<CR>', desc = 'Open Obsidian Graph View' },
-    { ',ot', '<cmd>ObsidianTemplate<CR>', desc = 'Insert Obsidian Template' },
-    { ',os', '<cmd>ObsidianSearch<CR>', desc = 'Search Obsidian Vault' },
+    { ',ov', '<cmd>Obsidian open<CR>', desc = 'Open Obsidian Vault' },
+    { ',on', '<cmd>Obsidian new<CR>', desc = 'Create New Obsidian Note' },
+    { ',od', '<cmd>Obsidian today<CR>', desc = 'Open Obsidian Daily Note' },
+    { ',oq', '<cmd>Obsidian quick_switch<CR>', desc = 'Open Obsidian Quick Switcher' },
+    { ',of', '<cmd>Obsidian follow_;ink<CR>', desc = 'Follow Obsidian Link' },
+    { ',ol', '<cmd>Obsidian link<CR>', desc = 'Insert Wiki Link' },
+    { ',ot', '<cmd>Obsidian template<CR>', desc = 'Insert Obsidian Template' },
+    { ',os', '<cmd>Obsidian search<CR>', desc = 'Search Obsidian Vault' },
+    { ',ox', '<cmd>Obsidian toggle_checkbox<CR>', desc = 'Toggle Checkbox' },
   },
 }
