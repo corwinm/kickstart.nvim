@@ -147,8 +147,8 @@ local vscode = require 'vscode'
 
 local function mapVSCodeCall(mode, lhs, rhs)
   vim.keymap.set(mode, lhs, function()
-    vscode.action(rhs)
-  end, { desc = 'VSCode action: ' .. rhs })
+    vscode.call(rhs)
+  end, { silent = true, noremap = true })
 end
 
 -- Remap folding keys
@@ -159,3 +159,12 @@ mapVSCodeCall('n', '<leader>zC', 'editor.foldRecursively')
 mapVSCodeCall('n', '<leader>zo', 'editor.unfold')
 mapVSCodeCall('n', '<leader>zO', 'editor.unfoldRecursively')
 mapVSCodeCall('n', '<leader>za', 'editor.toggleFold')
+
+-- Remap folding keys
+mapVSCodeCall('n', 'zM', 'editor.foldAll')
+mapVSCodeCall('n', 'zR', 'editor.unfoldAll')
+mapVSCodeCall('n', 'zc', 'editor.fold')
+mapVSCodeCall('n', 'zC', 'editor.foldRecursively')
+mapVSCodeCall('n', 'zo', 'editor.unfold')
+mapVSCodeCall('n', 'zO', 'editor.unfoldRecursively')
+mapVSCodeCall('n', 'za', 'editor.toggleFold')
