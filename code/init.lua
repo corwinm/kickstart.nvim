@@ -138,3 +138,24 @@ vim.keymap.set('n', '<leader>Y', [["+Y]], { desc = '[Y]ank line system' })
 vim.keymap.set({ 'n', 'v' }, '<leader>d', [["_d]], { desc = '[d]elete _' })
 
 vim.keymap.set('n', '<leader>w', '<cmd>w<CR>', { desc = '[w]rite file' })
+
+-- Code folding
+vim.api.nvim_set_keymap('n', 'j', 'gj', { noremap = false, silent = true })
+vim.api.nvim_set_keymap('n', 'k', 'gk', { noremap = false, silent = true })
+
+local vscode = require 'vscode'
+
+local function mapVSCodeCall(mode, lhs, rhs)
+  vim.keymap.set(mode, lhs, function()
+    vscode.action(rhs)
+  end, { desc = 'VSCode action: ' .. rhs })
+end
+
+-- Remap folding keys
+mapVSCodeCall('n', '<leader>zM', 'editor.foldAll')
+mapVSCodeCall('n', '<leader>zR', 'editor.unfoldAll')
+mapVSCodeCall('n', '<leader>zc', 'editor.fold')
+mapVSCodeCall('n', '<leader>zC', 'editor.foldRecursively')
+mapVSCodeCall('n', '<leader>zo', 'editor.unfold')
+mapVSCodeCall('n', '<leader>zO', 'editor.unfoldRecursively')
+mapVSCodeCall('n', '<leader>za', 'editor.toggleFold')
