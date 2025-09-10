@@ -168,3 +168,7 @@ mapVSCodeCall('n', 'zC', 'editor.foldRecursively')
 mapVSCodeCall('n', 'zo', 'editor.unfold')
 mapVSCodeCall('n', 'zO', 'editor.unfoldRecursively')
 mapVSCodeCall('n', 'za', 'editor.toggleFold')
+
+-- FindItFaster
+mapVSCodeCall('n', '<leader>sf', 'find-it-faster.findFiles')
+mapVSCodeCall('n', '<leader>sg', 'find-it-faster.findWithinFiles')
