@@ -175,6 +175,10 @@ vim.o.foldlevel = 99 -- Using nvim_treesitter for folding, so set this to max
 vim.o.foldenable = true -- Enable folding by default
 vim.o.foldcolumn = '0' -- '0' to hide the fold column, '1' to show it
 
+-- Enable spell checking
+vim.o.spell = true
+vim.o.spelllang = 'en_us'
+
 vim.g.skip_ts_context_commentstring_module = true
 
 -- [[ Basic Keymaps ]]
