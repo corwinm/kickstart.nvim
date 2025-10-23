@@ -128,9 +128,6 @@ vim.keymap.set('n', 'n', 'nzzzv')
 vim.keymap.set('n', 'N', 'Nzzzv')
 vim.keymap.set('n', '*', '*zz')
 
--- greatest remap ever
-vim.keymap.set('x', '<leader>p', [["_dP]], { desc = 'delete _ and [p]aste' })
-
 -- next greatest remap ever : asbjornHaland
 vim.keymap.set({ 'n', 'v' }, '<leader>y', [["+y]], { desc = '[y]ank system' })
 vim.keymap.set('n', '<leader>Y', [["+Y]], { desc = '[Y]ank line system' })
