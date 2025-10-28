@@ -1,7 +1,7 @@
 local homeVault = '~/Library/Mobile Documents/iCloud~md~obsidian/Documents/home'
 local oneDriveVault = '~/OneDrive/notes'
 local workVault = '~/Developer/notes'
-local vault = nil
+local vault = vim.fn.getcwd() -- Default to current working directory
 
 -- Function to check folder existence
 local function folder_exists(path)
@@ -14,6 +14,17 @@ end
 vault = folder_exists(homeVault) and homeVault or vault
 vault = folder_exists(oneDriveVault) and oneDriveVault or vault
 vault = folder_exists(workVault) and workVault or vault -- Prioritize based on folder existence
+
+local function search_incomplete_todos()
+  require('telescope.builtin').grep_string {
+    prompt_title = 'Search Incomplete Todos',
+    cwd = vim.fn.expand(vault),
+    search = '- [ ]',
+    use_regex = false,
+    search_dirs = { vim.fn.expand(vault) },
+    glob_pattern = '*.md',
+  }
+end
 
 return {
 
@@ -284,5 +295,6 @@ return {
     { ',ot', '<cmd>Obsidian template<CR>', desc = 'Insert Obsidian Template' },
     { ',os', '<cmd>Obsidian search<CR>', desc = 'Search Obsidian Vault' },
     { ',ox', '<cmd>Obsidian toggle_checkbox<CR>', desc = 'Toggle Checkbox' },
+    { ',oi', search_incomplete_todos, desc = 'Search Incomplete Todos' },
   },
 }
