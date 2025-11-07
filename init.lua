@@ -700,6 +700,27 @@ require('lazy').setup({
         end,
       })
 
+      -- Explicitly define diagnostic signs to prevent fallback to text during search
+      local signs = {
+        DiagnosticSignError = '󰅚 ',
+        DiagnosticSignWarn = '󰀪 ',
+        DiagnosticSignInfo = '󰋽 ',
+        DiagnosticSignHint = '󰌶 ',
+      }
+      for name, icon in pairs(signs) do
+        vim.fn.sign_define(name, { text = icon, texthl = name, numhl = '', priority = 100 })
+      end
+
+      -- Ensure signs remain stable during search by redefining them on CmdlineEnter
+      vim.api.nvim_create_autocmd('CmdlineEnter', {
+        pattern = { '/', '?' },
+        callback = function()
+          for name, icon in pairs(signs) do
+            vim.fn.sign_define(name, { text = icon, texthl = name, numhl = '', priority = 100 })
+          end
+        end,
+      })
+
       -- Diagnostic Config
       -- See :help vim.diagnostic.Opts
       vim.diagnostic.config {
