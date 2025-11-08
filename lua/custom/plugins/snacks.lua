@@ -4,6 +4,8 @@ return {
   lazy = false,
   ---@type snacks.Config
   opts = {
+    input = {},
+    terminal = {},
     lazygit = {
       -- your lazygit configuration comes here
       -- or leave it empty to use the default settings
