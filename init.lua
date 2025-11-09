@@ -1033,7 +1033,7 @@ require('lazy').setup({
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
   { -- Collection of various small independent plugins/modules
-    'echasnovski/mini.nvim',
+    'nvim-mini/mini.nvim',
     config = function()
       -- Better Around/Inside textobjects
       --
@@ -1065,8 +1065,23 @@ require('lazy').setup({
         return '%2l:%-2v'
       end
 
+      local hipatterns = require 'mini.hipatterns'
+      hipatterns.setup {
+        highlighters = {
+          -- Consider this over folke/todo-comments.nvim
+          -- Highlight standalone 'FIXME', 'HACK', 'TODO', 'NOTE'
+          -- fixme = { pattern = '%f[%w]()FIXME()%f[%W]', group = 'MiniHipatternsFixme' },
+          -- hack = { pattern = '%f[%w]()HACK()%f[%W]', group = 'MiniHipatternsHack' },
+          -- todo = { pattern = '%f[%w]()TODO()%f[%W]', group = 'MiniHipatternsTodo' },
+          -- note = { pattern = '%f[%w]()NOTE()%f[%W]', group = 'MiniHipatternsNote' },
+
+          -- Highlight hex color strings (`#rrggbb`) using that color
+          hex_color = hipatterns.gen_highlighter.hex_color(),
+        },
+      }
+
       -- ... and there is more!
-      --  Check out: https://github.com/echasnovski/mini.nvim
+      --  Check out: https://github.com/nvim-mini/mini.nvim
     end,
   },
   { -- Highlight, edit, and navigate code
