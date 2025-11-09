@@ -5,6 +5,7 @@ return {
   ---@type snacks.Config
   opts = {
     input = {},
+    indent = {},
     terminal = {},
     lazygit = {
       -- your lazygit configuration comes here
