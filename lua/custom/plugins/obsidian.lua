@@ -294,7 +294,13 @@ return {
     { ',ol', '<cmd>Obsidian link<CR>', desc = 'Insert Wiki Link' },
     { ',ot', '<cmd>Obsidian template<CR>', desc = 'Insert Obsidian Template' },
     { ',os', '<cmd>Obsidian search<CR>', desc = 'Search Obsidian Vault' },
-    { ',ox', '<cmd>Obsidian toggle_checkbox<CR>', desc = 'Toggle Checkbox' },
+    {
+      ',oc',
+      function()
+        require('obsidian.api').toggle_checkbox { ' ', 'x' }
+      end,
+      desc = 'Toggle Checkbox',
+    },
     { ',oi', search_incomplete_todos, desc = 'Search Incomplete Todos' },
   },
 }
