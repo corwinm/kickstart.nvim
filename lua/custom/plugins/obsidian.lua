@@ -173,26 +173,6 @@ return {
       substitutions = {},
     },
 
-    -- Optional, by default when you use `:ObsidianFollowLink` on a link to an external
-    -- URL it will be ignored but you can customize this behavior here.
-    ---@param url string
-    follow_url_func = function(url)
-      -- Open the URL in the default web browser.
-      vim.fn.jobstart { 'open', url } -- Mac OS
-      -- vim.fn.jobstart({"xdg-open", url})  -- linux
-      -- vim.cmd(':silent exec "!start ' .. url .. '"') -- Windows
-      -- vim.ui.open(url) -- need Neovim 0.10.0+
-    end,
-
-    -- Optional, by default when you use `:ObsidianFollowLink` on a link to an image
-    -- file it will be ignored but you can customize this behavior here.
-    ---@param img string
-    follow_img_func = function(img)
-      vim.fn.jobstart { 'qlmanage', '-p', img } -- Mac OS quick look preview
-      -- vim.fn.jobstart({"xdg-open", url})  -- linux
-      -- vim.cmd(':silent exec "!start ' .. url .. '"') -- Windows
-    end,
-
     picker = {
       -- Set your preferred picker. Can be one of 'telescope.nvim', 'fzf-lua', or 'mini.pick'.
       name = 'telescope.nvim',
@@ -268,7 +248,7 @@ return {
       -- The default folder to place images in via `:ObsidianPasteImg`.
       -- If this is a relative path it will be interpreted as relative to the vault root.
       -- You can always override this per image by passing a full path to the command instead of just a filename.
-      img_folder = 'assets/imgs', -- This is the default
+      folder = 'assets/imgs', -- This is the default
 
       -- Optional, customize the default name or prefix when pasting images via `:ObsidianPasteImg`.
       ---@return string
@@ -294,8 +274,8 @@ return {
     { ',ov', '<cmd>Obsidian open<CR>', desc = 'Open Obsidian Vault' },
     { ',on', '<cmd>Obsidian new<CR>', desc = 'Create New Obsidian Note' },
     { ',od', '<cmd>Obsidian today<CR>', desc = 'Open Obsidian Daily Note' },
-    { ',oq', '<cmd>Obsidian quick_switch<CR>', desc = 'Open Obsidian Quick Switcher' },
-    { ',of', '<cmd>Obsidian follow_link<CR>', desc = 'Follow Obsidian Link' },
+    { ',oq', '<cmd>Obsidian quick switch<CR>', desc = 'Open Obsidian Quick Switcher' },
+    { ',of', '<cmd>Obsidian follow link<CR>', desc = 'Follow Obsidian Link' },
     { ',ol', '<cmd>Obsidian link<CR>', desc = 'Insert Wiki Link' },
     { ',ot', '<cmd>Obsidian template<CR>', desc = 'Insert Obsidian Template' },
     { ',os', '<cmd>Obsidian search<CR>', desc = 'Search Obsidian Vault' },
