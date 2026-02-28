@@ -755,6 +755,15 @@ require('lazy').setup({
           single_file_support = false,
           settings = {},
         },
+        jsonls = {
+          settings = {
+            json = {
+              schemaDownload = { enable = true },
+              validate = { enable = true },
+              schemas = require('schemastore').json.schemas(),
+            },
+          },
+        },
         html = { filetypes = { 'html', 'twig', 'hbs' } },
         cssls = {},
         eslint = {
