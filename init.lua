@@ -897,7 +897,6 @@ require('lazy').setup({
         },
         opts = {},
       },
-      'Kaiser-Yang/blink-cmp-avante',
       'folke/lazydev.nvim',
     },
     --- @module 'blink.cmp'
@@ -943,16 +942,9 @@ require('lazy').setup({
       },
 
       sources = {
-        default = { 'lsp', 'path', 'snippets', 'lazydev', 'avante' },
+        default = { 'lsp', 'path', 'snippets', 'lazydev' },
         providers = {
           lazydev = { name = 'LazyDev', module = 'lazydev.integrations.blink', score_offset = 100 },
-          avante = {
-            module = 'blink-cmp-avante',
-            name = 'Avante',
-            opts = {
-              -- options for blink-cmp-avante
-            },
-          },
         },
       },
 
