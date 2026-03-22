@@ -720,6 +720,69 @@ require('lazy').setup({
       --  When you add blink.cmp, luasnip, etc. Neovim now has *more* capabilities.
       --  So, we create new capabilities with blink.cmp, and then broadcast that to the servers.
       local capabilities = require('blink.cmp').get_lsp_capabilities()
+      local util = require('lspconfig').util
+
+      local eslint_config_files = {
+        '.eslintrc',
+        '.eslintrc.js',
+        '.eslintrc.cjs',
+        '.eslintrc.yaml',
+        '.eslintrc.yml',
+        '.eslintrc.json',
+        'eslint.config.js',
+        'eslint.config.mjs',
+        'eslint.config.cjs',
+        'eslint.config.ts',
+        'eslint.config.mts',
+        'eslint.config.cts',
+      }
+
+      local eslint_flat_config_files = {
+        'eslint.config.js',
+        'eslint.config.mjs',
+        'eslint.config.cjs',
+        'eslint.config.ts',
+        'eslint.config.mts',
+        'eslint.config.cts',
+      }
+
+      local oxlint_root_pattern = util.root_pattern('.oxlintrc.json', 'oxlint.config.ts')
+
+      local function eslint_root_dir(fname)
+        if oxlint_root_pattern(fname) ~= nil then
+          return nil
+        end
+
+        if util.root_pattern('deno.json', 'deno.jsonc', 'deno.lock')(fname) ~= nil then
+          return nil
+        end
+
+        local root = util.root_pattern(unpack(eslint_config_files))(fname)
+        if root then
+          return root
+        end
+
+        local package_root = util.root_pattern('package.json')(fname)
+        if package_root then
+          local package_json = io.open(vim.fs.joinpath(package_root, 'package.json'), 'r')
+          if package_json then
+            for line in package_json:lines() do
+              if line:find '"eslintConfig"' then
+                package_json:close()
+                return package_root
+              end
+            end
+            package_json:close()
+          end
+        end
+
+        return nil
+      end
+
+      local function has_eslint_flat_config(root_dir)
+        return root_dir ~= nil and vim.fs.find(eslint_flat_config_files, { path = root_dir, upward = false, type = 'file', limit = 1 })[1] ~= nil
+      end
+
       -- Enable the following language servers
       --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
       --
@@ -735,12 +798,12 @@ require('lazy').setup({
         pyright = {},
         -- rust_analyzer = {},
         ts_ls = {
-          root_dir = require('lspconfig').util.root_pattern('package.json', 'tsconfig.json'),
+          root_dir = util.root_pattern('package.json', 'tsconfig.json'),
           single_file_support = false,
           settings = {},
         },
         denols = {
-          root_dir = require('lspconfig').util.root_pattern('deno.json', 'deno.jsonc'),
+          root_dir = util.root_pattern('deno.json', 'deno.jsonc'),
           single_file_support = false,
           settings = {},
         },
@@ -755,10 +818,19 @@ require('lazy').setup({
         },
         html = { filetypes = { 'html', 'twig', 'hbs' } },
         cssls = {},
+        oxlint = {},
         eslint = {
-          root_dir = require('lspconfig').util.root_pattern 'package.json',
+          root_dir = eslint_root_dir,
+          single_file_support = false,
+          on_new_config = function(config, root_dir)
+            config.settings = vim.tbl_deep_extend('force', config.settings or {}, {
+              experimental = {
+                useFlatConfig = has_eslint_flat_config(root_dir),
+              },
+            })
+          end,
           settings = {
-            useFlatConfig = require('lspconfig').util.root_pattern 'eslint.config.js'() ~= nil,
+            experimental = {},
           },
         },
         tailwindcss = {},
