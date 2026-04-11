@@ -1,8 +1,7 @@
 require 'config.options'
 require 'config.keymaps'
 require 'config.commands'
-
-local function gh(plugin) return 'https://github.com/' .. plugin end
+local gh = require('utils').gh
 
 vim.pack.add {
   gh 'NMAC427/guess-indent.nvim',
@@ -27,6 +26,7 @@ vim.pack.add {
   gh 'folke/todo-comments.nvim',
   gh 'nvim-mini/mini.nvim',
   { src = gh 'nvim-treesitter/nvim-treesitter', branch = 'main' },
+  gh 'nvim-treesitter/nvim-treesitter-context',
   gh 'Pocco81/auto-save.nvim',
   gh 'windwp/nvim-autopairs',
 }
@@ -619,6 +619,8 @@ local configTreeSitter = function()
 end
 
 configTreeSitter()
+
+require('treesitter-context').setup {}
 
 require('auto-save').setup {}
 vim.keymap.set('n', '<leader>n', ':ASToggle<CR>', { desc = 'Toggle AutoSave' })
