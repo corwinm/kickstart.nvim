@@ -49,9 +49,17 @@
       "rev": "8d82c240f190fc33723d48c308ccc1ed8baad69d",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
+    "go.nvim": {
+      "rev": "dcffbd33d04781c10c4246929c07e90a07689358",
+      "src": "https://github.com/ray-x/go.nvim"
+    },
     "guess-indent.nvim": {
       "rev": "84a4987ff36798c2fc1169cbaff67960aed9776f",
       "src": "https://github.com/NMAC427/guess-indent.nvim"
+    },
+    "guihua.lua": {
+      "rev": "d178056728548ed8a99cce94de47b7500bd6889a",
+      "src": "https://github.com/ray-x/guihua.lua"
     },
     "gx.nvim": {
       "rev": "ba9c408fc0130fc4548760c3933a81b58fc50de8",

@@ -12,6 +12,12 @@ vim.api.nvim_create_autocmd('PackChanged', {
       if name == 'telescope-fzf-native' or name == 'codesnap.nvim' then vim.system({ 'make' }, { cwd = ev.data.path }):wait() end
 
       if name == 'LuaSnip' then vim.system({ 'make', 'install_jsregexp' }, { cwd = ev.data.path }):wait() end
+
+      if name == 'go.nvim' then
+        vim.cmd.packadd 'guihua.lua'
+        if not ev.data.active then vim.cmd.packadd 'go.nvim' end
+        require('go.install').update_all_sync()
+      end
     end
 
     if name == 'nvim-treesitter' and kind == 'update' then
