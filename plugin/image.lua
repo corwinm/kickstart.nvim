@@ -1,11 +1,9 @@
-return {
-  '3rd/image.nvim',
-  event = 'VeryLazy',
-  dependencies = {
-    'nvim-treesitter/nvim-treesitter',
-    'luarocks.nvim',
-  },
-  opts = {
+local gh = require('utils').gh
+
+vim.schedule(function()
+  vim.pack.add { gh '3rd/image.nvim' }
+
+  require('image').setup {
     backend = 'kitty',
     processor = 'magick_cli',
     integrations = {
@@ -19,9 +17,7 @@ return {
           -- Format image path for Obsidian notes
           local notes_dir = vim.fn.expand(vim.env.NOTES_ASSETS_DIR)
           local new_image_path = notes_dir .. '/' .. image_path
-          if vim.fn.filereadable(new_image_path) then
-            return new_image_path
-          end
+          if vim.fn.filereadable(new_image_path) then return new_image_path end
           return fallback(document_path, image_path)
         end,
       },
@@ -31,14 +27,7 @@ return {
     max_width_window_percentage = nil,
     max_height_window_percentage = 50,
     kitty_method = 'normal',
-  },
-  keys = {
-    {
-      '<leader>ic',
-      function()
-        require('image').clear()
-      end,
-      desc = 'Clear Image',
-    },
-  },
-}
+  }
+end)
+
+vim.keymap.set('n', '<leader>ic', function() require('image').clear() end, { desc = 'Clear Image' })

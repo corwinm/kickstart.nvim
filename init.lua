@@ -54,9 +54,6 @@ require('luarocks-nvim').setup()
 vim.cmd.colorscheme 'catppuccin-macchiato'
 require('catppuccin').setup {
   transparent_background = true,
-  integrations = {
-    noice = true,
-  },
 }
 
 require('guess-indent').setup {}
