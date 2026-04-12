@@ -1,7 +1,12 @@
-return {
-  'folke/noice.nvim',
-  event = 'VeryLazy',
-  opts = {
+local gh = require('utils').gh
+
+vim.schedule(function()
+  vim.pack.add {
+    gh 'MunifTanjim/nui.nvim',
+    gh 'folke/noice.nvim',
+  }
+
+  require('noice').setup {
     lsp = {
       -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
       override = {
@@ -18,9 +23,5 @@ return {
       inc_rename = false, -- enables an input dialog for inc-rename.nvim
       lsp_doc_border = true, -- add a border to hover docs and signature help
     },
-  },
-  dependencies = {
-    'MunifTanjim/nui.nvim',
-    'rcarriga/nvim-notify',
-  },
-}
+  }
+end)

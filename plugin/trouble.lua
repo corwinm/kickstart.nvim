@@ -1,20 +1,16 @@
-local gh = require('utils').gh
-local registerKeymaps = require('utils').registerKeymaps
+local utils = require 'utils'
+local gh = utils.gh
+local pack_command = utils.pack_command
+local registerKeymaps = utils.registerKeymaps
 
-vim.pack.add {
-  { src = gh 'folke/trouble.nvim', cmd = 'Trouble' },
-}
-
-vim.api.nvim_create_user_command('Trouble', function(opts)
-  vim.cmd.packadd 'trouble.nvim'
-  require('trouble').setup {}
-
-  -- forward the original command args to Trouble after loading
-  local args = opts.args ~= '' and (' ' .. opts.args) or ''
-  vim.cmd('Trouble' .. args)
-end, {
-  nargs = '*',
-  complete = function() return { 'diagnostics', 'symbols', 'lsp', 'loclist', 'qflist' } end,
+pack_command({ src = gh 'folke/trouble.nvim' }, 'Trouble', {
+  command_opts = {
+    nargs = '*',
+    complete = function() return { 'diagnostics', 'symbols', 'lsp', 'loclist', 'qflist' } end,
+  },
+  setup = function()
+    require('trouble').setup {}
+  end,
 })
 
 registerKeymaps {

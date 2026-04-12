@@ -30,4 +30,49 @@ local function registerKeymaps(keymaps)
 end
 M.registerKeymaps = registerKeymaps
 
+--- Infer a plugin name from a vim.pack spec.
+--- @param spec string|table
+--- @return string
+local function pack_name(spec)
+  if type(spec) == 'table' and spec.name then return spec.name end
+
+  local src = type(spec) == 'table' and spec.src or spec
+  local name = src:match '/([^/]+)/*$' or src
+
+  return name:gsub('%.git$', '')
+end
+
+--- Create a command that loads an opt plugin on first use.
+--- @param spec string|table
+--- @param command_name string
+--- @param opts? table
+local function pack_command(spec, command_name, opts)
+  opts = opts or {}
+
+  local plugin_name = pack_name(spec)
+  local pack_spec = type(spec) == 'table' and spec or { src = spec }
+  local did_setup = false
+
+  vim.pack.add({ pack_spec }, { load = false })
+
+  vim.api.nvim_create_user_command(command_name, function(cmd_opts)
+    if opts.replace_command ~= false then pcall(vim.api.nvim_del_user_command, command_name) end
+
+    vim.cmd.packadd(plugin_name)
+
+    if not did_setup then
+      did_setup = true
+
+      if opts.setup then opts.setup() end
+    end
+
+    if opts.invoke then return opts.invoke(cmd_opts) end
+
+    local bang = cmd_opts.bang and '!' or ''
+    local args = cmd_opts.args ~= '' and (' ' .. cmd_opts.args) or ''
+    vim.cmd(command_name .. bang .. args)
+  end, opts.command_opts or { nargs = '*', bang = true })
+end
+M.pack_command = pack_command
+
 return M

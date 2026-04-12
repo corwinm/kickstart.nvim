@@ -5,7 +5,7 @@ This repo is a Neovim configuration based on kickstart.nvim. Keep changes small 
 ## Repo-specific notes
 
 - Most core configuration lives in `init.lua`.
-- Add new plugins in `lua/custom/plugins/<name>.lua`.
+- Add new plugins in `plugin/<name>.lua`.
 - Put server-specific LSP overrides in `lsp/<server>.lua`.
 - Put always-loaded startup logic in `plugin/<name>.lua`.
 - Follow `.stylua.toml` and nearby code for Lua style.

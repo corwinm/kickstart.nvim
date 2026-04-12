@@ -1,9 +1,28 @@
 require 'config.options'
 require 'config.keymaps'
 require 'config.commands'
+
 local gh = require('utils').gh
 
+vim.api.nvim_create_autocmd('PackChanged', {
+  callback = function(ev)
+    local name, kind = ev.data.spec.name, ev.data.kind
+
+    if kind == 'install' or kind == 'update' then
+      if name == 'telescope-fzf-native' or name == 'codesnap.nvim' then vim.system({ 'make' }, { cwd = ev.data.path }):wait() end
+
+      if name == 'LuaSnip' then vim.system({ 'make', 'install_jsregexp' }, { cwd = ev.data.path }):wait() end
+    end
+
+    if name == 'nvim-treesitter' and kind == 'update' then
+      if not ev.data.active then vim.cmd.packadd 'nvim-treesitter' end
+      vim.cmd 'TSUpdate'
+    end
+  end,
+})
+
 vim.pack.add {
+  gh 'vhyrro/luarocks.nvim',
   gh 'NMAC427/guess-indent.nvim',
   gh 'folke/which-key.nvim',
   gh 'nvim-lua/plenary.nvim',
@@ -11,7 +30,6 @@ vim.pack.add {
   gh 'nvim-telescope/telescope-ui-select.nvim',
   gh 'nvim-tree/nvim-web-devicons',
   gh 'nvim-telescope/telescope.nvim',
-  gh 'folke/lazydev.nvim',
   gh 'mason-org/mason.nvim',
   gh 'mason-org/mason-lspconfig.nvim',
   gh 'WhoIsSethDaniel/mason-tool-installer.nvim',
@@ -31,20 +49,7 @@ vim.pack.add {
   gh 'windwp/nvim-autopairs',
 }
 
-vim.api.nvim_create_autocmd('PackChanged', {
-  callback = function(ev)
-    local name, kind = ev.data.spec.name, ev.data.kind
-
-    if name == 'telescope-fzf-native' then vim.fn.system('make -C ' .. ev.data.path) end
-
-    if name == 'LuaSnip' then vim.fn.system('make install_jsregexp` -C ' .. ev.data.path) end
-
-    if name == 'nvim-treesitter' and kind == 'update' then
-      if not ev.data.active then vim.cmd.packadd 'nvim-treesitter' end
-      vim.cmd 'TSUpdate'
-    end
-  end,
-})
+require('luarocks-nvim').setup()
 
 vim.cmd.colorscheme 'catppuccin-macchiato'
 require('catppuccin').setup {
@@ -205,20 +210,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
     --  Useful when you're not sure what type a variable is and you want to see
     --  the definition of its *type*, not where it was *defined*.
     vim.keymap.set('n', 'grt', builtin.lsp_type_definitions, { buffer = buf, desc = '[G]oto [T]ype Definition' })
-  end,
-})
-
--- lazydev
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = 'lua',
-  callback = function()
-    require('lazydev').setup {
-      library = {
-        -- Load luvit types when the `vim.uv` word is found
-        { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
-        { path = 'snacks.nvim', words = { 'Snacks' } },
-      },
-    }
   end,
 })
 
@@ -444,6 +435,14 @@ local servers = {
         completion = {
           callSnippet = 'Replace',
         },
+        workspace = {
+          checkThirdParty = false,
+          library = {
+            vim.fs.joinpath(vim.env.VIMRUNTIME, 'lua'),
+            '${3rd}/luv/library',
+            vim.fs.joinpath(vim.fn.stdpath 'data', 'site', 'pack', 'core', 'opt', 'snacks.nvim', 'lua'),
+          },
+        },
         -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
         -- diagnostics = { disable = { 'missing-fields' } },
       },
@@ -518,10 +517,7 @@ require('blink.cmp')
     },
 
     sources = {
-      default = { 'lsp', 'path', 'snippets', 'lazydev' },
-      providers = {
-        lazydev = { name = 'LazyDev', module = 'lazydev.integrations.blink', score_offset = 100 },
-      },
+      default = { 'lsp', 'path', 'snippets' },
     },
 
     snippets = { preset = 'luasnip' },
