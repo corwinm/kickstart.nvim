@@ -4,41 +4,20 @@ vim.pack.add { 'https://github.com/folke/snacks.nvim' }
 local opts = {
   input = {},
   indent = {},
-  imgage = {
-    enabled = true,
-    doc = {
-      enabled = true,
-    },
+  imgage = {},
+  notifier = {
+    top_down = false,
   },
   terminal = {},
   words = {},
-  lazygit = {
-    -- your lazygit configuration comes here
-    -- or leave it empty to use the default settings
-  },
-  git = {
-    -- your git configuration comes here
-    -- or leave it empty to use the default settings
-  },
-  gitbrowse = {
-    -- your gitbrowse configuration comes here
-    -- or leave it empty to use the default settings
-  },
-  gh = {
-    -- your gh configuration comes here
-    -- or leave it empty to use the default settings
-    -- refer to the configuration section below
-  },
+  lazygit = {},
+  git = {},
+  gitbrowse = {},
+  gh = {},
   picker = {
     sources = {
-      gh_issue = {
-        -- your gh_issue picker configuration comes here
-        -- or leave it empty to use the default settings
-      },
-      gh_pr = {
-        -- your gh_pr picker configuration comes here
-        -- or leave it empty to use the default settings
-      },
+      gh_issue = {},
+      gh_pr = {},
     },
   },
 }
