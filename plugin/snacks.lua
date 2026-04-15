@@ -4,6 +4,12 @@ vim.pack.add { 'https://github.com/folke/snacks.nvim' }
 local opts = {
   input = {},
   indent = {},
+  imgage = {
+    enabled = true,
+    doc = {
+      enabled = true,
+    },
+  },
   terminal = {},
   words = {},
   lazygit = {
@@ -48,3 +54,4 @@ vim.keymap.set('n', '<leader>gp', function() Snacks.picker.gh_pr() end, { desc =
 vim.keymap.set('n', '<leader>gP', function() Snacks.picker.gh_pr { state = 'all' } end, { desc = 'GitHub Pull Requests (all)' })
 vim.keymap.set({ 'n', 't' }, ']]', function() Snacks.words.jump(vim.v.count1) end, { desc = 'Next Reference' })
 vim.keymap.set({ 'n', 't' }, '[[', function() Snacks.words.jump(-vim.v.count1) end, { desc = 'Prev Reference' })
+vim.keymap.set('n', '<leader>ih', function() Snacks.image.hover() end, { desc = 'Image Hover' })
